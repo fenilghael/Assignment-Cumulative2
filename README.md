@@ -7,7 +7,7 @@ This repository contains a structured dataset for **managing teachers** in an ed
 
 ## 📂 **Repository Details**  
 
-- **🔗 GitHub Repository:** [Cumulative1](https://github.com/fenilghael/Cumulative1.git)  
+- **🔗 GitHub Repository:** [Cumulative2](https://github.com/fenilghael/Assignment-Cumulative2.git)  
 - **👨‍💻 Author:** Fenil Ghael  
 - **📊 Database Focus:** Teacher Management  
 
