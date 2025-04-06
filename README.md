@@ -51,5 +51,5 @@ MySQL – A relational database system used for managing teacher and class recor
 
 ### 🛠️ Clone the Repository  
 ```sh
-git clone https://github.com/fenilghael/Cumulative1.git
+https://github.com/fenilghael/Assignment-Cumulative2.git
 ```
