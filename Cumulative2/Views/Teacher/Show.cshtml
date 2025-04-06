@@ -1,0 +1,55 @@
+﻿@model Cumulative1.Models.Teacher
+
+@{
+    ViewBag.Title = "Teacher Details";
+}
+
+<div id="containerShow" class="container">
+    <nav class="my-3">
+        <a class="navlink" href="/Teacher/List">Back To Teachers List</a>
+    </nav>
+
+    <h2>Teacher Information</h2>
+
+    @if (Model == null)
+    {
+    <div class="alert alert-danger">Teacher details not found.</div>
+    }
+    else
+    {
+    <div class="mb-3">
+        <strong>ID:</strong> @Model.TeacherId
+    </div>
+    <div class="mb-3">
+        <strong>Employee Number:</strong> @Model.EmployeeNumber
+    </div>
+    <div class="mb-3">
+        <strong>Full Name:</strong> @Model.TeacherFirstName @Model.TeacherLastName
+    </div>
+    <div class="mb-3">
+        <strong>Hire Date:</strong> @Model.HireDate.ToString("MM/dd/yyyy")
+    </div>
+    <div class="mb-3">
+        <strong>Salary:</strong> @Model.Salary.ToString("C")
+    </div>
+
+    <h3>Assigned Classes</h3>
+    <div class="mb-3">
+        @if (Model.AssignedClasses != null && Model.AssignedClasses.Any())
+            {
+        <ul>
+            @foreach (var assignedClass in Model.AssignedClasses)
+                    {
+            <li><a href="/Class/Show/@assignedClass.ClassId">@assignedClass.ClassCode</a> - @assignedClass.ClassName</li>
+                    }
+        </ul>
+            }
+            else
+            {
+        <p>No classes assigned.</p>
+            }
+    </div>
+    <a class="mt-3 btn btn-danger" href="/Teacher/DeleteConfirm/@Model.TeacherId">Delete Teacher</a>
+    <a class="mt-3 btn btn-danger" href="/Teacher/Ajax_DeleteConfirm/@Model.TeacherId">Delete Teacher with AJAX</a>
+    }
+</div>
