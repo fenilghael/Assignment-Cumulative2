@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
 using System.Web.Mvc;
@@ -145,3 +145,89 @@ namespace Cumulative2.Controllers
         }
     }
 }
+
+/// <summary>
+/// Routes to a dynamically generated "Update Teacher" page. Gathers teacher information from the database.
+/// </summary>
+/// <param name="teacherId">The ID of the teacher to update.</param>
+/// <returns>A view populated with the current teacher data.</returns>
+/// <example>
+/// GET /Teacher/Update/3
+/// </example>
+public ActionResult Update(int teacherId)
+{
+    TeacherDataController teacherController = new TeacherDataController();
+    Teacher teacher = teacherController.FindTeacher(teacherId);
+
+    if (teacher == null || teacher.TeacherId == 0)
+    {
+        TempData["ErrorMessage"] = "Teacher not found.";
+        return RedirectToAction("List");
+    }
+
+    return View(teacher);
+}
+
+/// <summary>
+/// Routes to a dynamically generated "Update Teacher" page using AJAX. Gathers teacher information from the database.
+/// </summary>
+/// <param name="teacherId">The ID of the teacher to update via AJAX.</param>
+/// <returns>A view populated with the current teacher data.</returns>
+/// <example>
+/// GET /Teacher/Ajax_Update/3
+/// </example>
+public ActionResult Ajax_Update(int teacherId)
+{
+    TeacherDataController teacherController = new TeacherDataController();
+    Teacher teacher = teacherController.FindTeacher(teacherId);
+
+    if (teacher == null || teacher.TeacherId == 0)
+    {
+        TempData["ErrorMessage"] = "Teacher not found.";
+        return RedirectToAction("List");
+    }
+
+    return View(teacher);
+}
+
+/// <summary>
+/// Updates a teacher’s information based on user input.
+/// </summary>
+/// <param name="teacherId">The ID of the teacher being updated.</param>
+/// <param name="firstName">The updated first name of the teacher.</param>
+/// <param name="lastName">The updated last name of the teacher.</param>
+/// <param name="employeeNum">The updated employee number of the teacher.</param>
+/// <param name="hireDate">The updated hire date of the teacher.</param>
+/// <param name="salary">The updated salary of the teacher.</param>
+/// <returns>Redirects to the teacher's Show page if successful; returns to update view with error message if not.</returns>
+/// <example>
+/// POST /Teacher/Update/3
+/// Form Data: { firstName: "Updated", lastName: "Name", employeeNum: "EMP123", hireDate: "2023-01-01", salary: 80000 }
+/// </example>
+[HttpPost]
+public ActionResult Update(int teacherId, string firstName, string lastName, string employeeNum, DateTime hireDate, decimal? salary)
+{
+    TeacherDataController teacherController = new TeacherDataController();
+
+    if (string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(lastName) ||
+        string.IsNullOrEmpty(employeeNum) || hireDate == null || hireDate > DateTime.Now || salary == null || salary < 0)
+    {
+        ViewBag.Message = "Missing or incorrect information when updating a teacher.";
+        Teacher teacher = teacherController.FindTeacher(teacherId);
+        return View("Update", teacher);
+    }
+
+    Teacher updatedTeacher = new Teacher
+    {
+        TeacherFname = firstName,
+        TeacherLname = lastName,
+        EmployeeNumber = employeeNum,
+        HireDate = hireDate,
+        Salary = salary ?? 0
+    };
+
+    teacherController.UpdateTeacher(teacherId, updatedTeacher);
+
+    return RedirectToAction("Show", new { teacherId = teacherId });
+}
+
