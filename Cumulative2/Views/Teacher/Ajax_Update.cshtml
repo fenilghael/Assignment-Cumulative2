@@ -1,0 +1,40 @@
+﻿@model Cumulative1.Models.Teacher
+@{
+    ViewBag.Title = "Ajax_Update";
+}
+
+<div id="containershow">
+    <nav class="my-3">
+        <a class="navlink" href="/Teacher/show/@Model.TeacherId">Back To Teacher details</a>
+    </nav>
+    <h2>Update Teacher with AJAX</h2>
+
+    <div class="form-group">
+        <label for="FirstName">First Name:</label>
+        <input type="text" class="form-control" id="FirstName" name="FirstName" placeholder="Enter first name" value="@Model.TeacherFname" />
+        <span class="error-message text-danger"></span>
+    </div>
+    <div class="mt-2 form-group">
+        <label for="LastName">Last Name:</label>
+        <input type="text" class="form-control" id="LastName" name="LastName" placeholder="Enter last name" value="@Model.TeacherLname" />
+        <span class="error-message text-danger"></span>
+    </div>
+    <div class="mt-2 form-group">
+        <label for="EmpNumber">Employee Number:</label>
+        <input type="text" class="form-control" id="EmpNumber" name="EmpNumber" placeholder="Enter employee number" value="@Model.EmployeeNumber" />
+        <span class="error-message text-danger"></span>
+    </div>
+    <div class="mt-2 form-group">
+        <label for="JoiningDate">Hire Date:</label>
+        <input type="date" class="form-control" id="JoiningDate" name="JoiningDate" value="@Model.HireDate.ToString("yyyy-MM-dd")" />
+        <span class="error-message text-danger"></span>
+    </div>
+    <div class="mt-2 form-group">
+        <label for="TeacherSalary">Salary:</label>
+        <input type="number" step=".01" class="form-control" id="TeacherSalary" name="TeacherSalary" placeholder="Enter salary" value="@Model.Salary" />
+        <span class="error-message text-danger"></span>
+    </div>
+    <button onclick="UpdateTeacher(@Model.TeacherId);" class="mt-2 btn btn-primary">Update Teacher</button>
+
+    <p class="mt-3 text-danger" id="ResponseText"></p>
+</div>

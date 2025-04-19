@@ -1,0 +1,55 @@
+﻿@model Cumulative1.Models.Teacher
+@{
+    ViewBag.Title = "Teacher Information Update";
+}
+<script>
+    window.onload = function () {
+        // Initializing form and event handler
+        var teacherForm = document.forms.teacherUpdateForm;
+
+        // Form submission validation
+        teacherForm.onsubmit = function () {
+            return validateTeacherForm();
+        };
+    }
+</script>
+<div id="teacher-update-container">
+    <nav class="my-3">
+        <a class="navlink" href="/Teacher/show/@Model.TeacherId">Go Back to Teacher Details</a>
+    </nav>
+    <h2>Update Teacher Information</h2>
+
+    <form method="POST" action="/Teacher/Update/@Model.TeacherId" name="teacherUpdateForm">
+        <div class="form-group">
+            <label for="FirstName">First Name:</label>
+            <input type="text" class="form-control" id="FirstName" name="FirstName" placeholder="Enter first name" value="@Model.TeacherFname" />
+            <span class="error-message text-danger"></span>
+        </div>
+        <div class="mt-2 form-group">
+            <label for="LastName">Last Name:</label>
+            <input type="text" class="form-control" id="LastName" name="LastName" placeholder="Enter last name" value="@Model.TeacherLname" />
+            <span class="error-message text-danger"></span>
+        </div>
+        <div class="mt-2 form-group">
+            <label for="EmpId">Employee ID:</label>
+            <input type="text" class="form-control" id="EmpId" name="EmpId" placeholder="Enter employee number" value="@Model.EmployeeNumber" />
+            <span class="error-message text-danger"></span>
+        </div>
+        <div class="mt-2 form-group">
+            <label for="JoiningDate">Join Date:</label>
+            <input type="date" class="form-control" id="JoiningDate" name="JoiningDate" value="@Model.HireDate.ToString("yyyy-MM-dd")" />
+            <span class="error-message text-danger"></span>
+        </div>
+        <div class="mt-2 form-group">
+            <label for="TeacherSalary">Salary:</label>
+            <input type="number" step=".01" class="form-control" id="TeacherSalary" name="TeacherSalary" placeholder="Enter salary" value="@Model.Salary" />
+            <span class="error-message text-danger"></span>
+        </div>
+        <button type="submit" class="mt-2 btn btn-primary">Save Changes</button>
+    </form>
+
+    @if (!string.IsNullOrEmpty(ViewBag.Message))
+    {
+    <p class="mt-3 text-danger">@ViewBag.Message</p>
+    }
+</div>
