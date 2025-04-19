@@ -1,4 +1,4 @@
-﻿using MySql.Data.MySqlClient;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using Cumulative2.Models;
@@ -175,3 +175,53 @@ namespace Cumulative2.Controllers
         }
     }
 }
+/// <summary>
+/// Updates the details of a teacher in the database based on their ID.
+/// </summary>
+/// <param name="teacherId">The ID of the teacher to be updated.</param>
+/// <param name="updatedTeacher">The updated teacher object containing new details.</param>
+/// <returns>
+/// Returns 400 Bad Request if data is invalid, or 200 OK on a successful update.
+/// </returns>
+/// <example>
+/// POST /api/TeacherData/UpdateTeacher/3
+/// {
+///     "TeacherFname": "UpdatedFirstName",
+///     "TeacherLname": "UpdatedLastName",
+///     "EmployeeNumber": "UpdatedEmployeeNumber",
+///     "HireDate": "2024-04-20",
+///     "Salary": 70
+/// }
+/// </example>
+[HttpPost]
+[EnableCors(origins: "*", methods: "*", headers: "*")]
+[Route("api/TeacherData/UpdateTeacher/{teacherId}")]
+public IHttpActionResult UpdateTeacher(int teacherId, [FromBody] Teacher updatedTeacher)
+{
+    if (string.IsNullOrEmpty(updatedTeacher.TeacherFname) || string.IsNullOrEmpty(updatedTeacher.TeacherLname) ||
+        string.IsNullOrEmpty(updatedTeacher.EmployeeNumber) || updatedTeacher.HireDate == null ||
+        updatedTeacher.HireDate > DateTime.Now || updatedTeacher.Salary < 0)
+    {
+        return BadRequest("Invalid data provided for updating the teacher.");
+    }
+
+    MySqlConnection conn = schoolDb.AccessDatabase();
+    conn.Open();
+
+    MySqlCommand cmd = conn.CreateCommand();
+    cmd.CommandText = "UPDATE teachers SET teacherfname=@TeacherFname, teacherlname=@TeacherLname, employeenumber=@EmployeeNumber, hiredate=@HireDate, salary=@Salary WHERE teacherid=@TeacherId";
+
+    cmd.Parameters.AddWithValue("@TeacherFname", updatedTeacher.TeacherFname);
+    cmd.Parameters.AddWithValue("@TeacherLname", updatedTeacher.TeacherLname);
+    cmd.Parameters.AddWithValue("@EmployeeNumber", updatedTeacher.EmployeeNumber);
+    cmd.Parameters.AddWithValue("@HireDate", updatedTeacher.HireDate);
+    cmd.Parameters.AddWithValue("@Salary", updatedTeacher.Salary);
+    cmd.Parameters.AddWithValue("@TeacherId", teacherId);
+
+    cmd.Prepare();
+    cmd.ExecuteNonQuery();
+    conn.Close();
+
+    return Ok("Teacher updated successfully");
+}
+
